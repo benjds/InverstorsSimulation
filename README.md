@@ -1,4 +1,6 @@
 # InvestorsSimulation
 Python project school
 
-[16-02-2017] Project initialize
+In this project we’ll write a simulation of several types of investors. Obviously, there will be a lot of assumptions made in this project and it should in no way be seen as a realistic modelling tool rather than programming exercise. Should you want to make any adjustment to make the case more realistic you are invited to do so, however, don’t get lost in this and make sure that you focus on the main goal of this project: using, understanding and structuring Python code.
+
+The goal will be to model three types of investors: aggressive, defensive and mixed. There are two types of investments: stocks and bonds. Aggressive investors only investigate in stocks, defensive investors only in bonds. Mixed investors are a combination of both extremes. The process will be split up as follows. In Part1 we will start by modelling two types of bonds: long term and short term. In Part2 the goal will be to use pandas to read in stock data and model stocks. Part 3 will consists out of creating the three types of investors and setting up everything correctly. In part 4 you will be asked to simulate a few scenario’s and show that you have written your code in such a way that you can easily provide a solution without much changes. 
