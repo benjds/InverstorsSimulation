@@ -22,11 +22,24 @@ class Bond(object):
         self.mAmount = 0
         self.interest = 0
 
+        self.checkValue() # Check the minimum value f
+
+
+
+    def checkValue(self):
+        if(self.amount < self.mAmount):
+            self.amount = self.mAmount
+
+        if (self.term < self.mTerm):
+            self.term = self.mTerm
+
+
 
     def drawPlot(self):
         plt.plot(self.interestSeries())
         plt.ylabel('Interest time series')
         plt.show()
+
 
     def interestSeries(self):
         seriesI = []
@@ -35,9 +48,9 @@ class Bond(object):
 
         return seriesI
 
+
     def coumpoundedInterest(self, time):
         return self.amount * ( 1 + self.interest)**time
-
 
 #------
 
