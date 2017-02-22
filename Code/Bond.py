@@ -5,7 +5,8 @@
 
 #@Aim: Represent a short term or a long term bon with specifics criteria
 #@Initialize_date: 16-02-2017
-#@Updates:      - [22-02-2017] : Attributes updates + add compoundedInterest()
+#@Updates:  - [18-02-2017]: Added profit attribute to classes ShortTerm and LongTerm
+#           - [22-02-2017]: Attributes updates + add compoundedInterest()
 #TODO: - Add a plot for a n years interest
 
 
@@ -31,11 +32,8 @@ class ShortTerm(Bond):
         super(ShortTerm, self).__init__(amount, term)
         self.mTerm = 2          # in years
         self.mAmount = 1000
-        self.interest = 0.1
+        self.interest = 0.01
 
-
-
-#------
 
 # Long Term Bond, extends Bond
 
@@ -44,5 +42,4 @@ class LongTerm(Bond):
         super(LongTerm, self).__init__(amount, term)
         self.mTerm = 5          # in years
         self.mAmount = 3000
-        self.interest = 0.3
-
+        self.interest = 0.03
