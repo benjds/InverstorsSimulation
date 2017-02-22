@@ -11,4 +11,7 @@ from Code import Bond
 STBond = Bond.ShortTerm(1000, 100)
 LTBond = Bond.LongTerm(3000, 100)
 
-print(STBond.coumpoundedInterest(100))
+
+
+STBond.drawPlot()
+LTBond.drawPlot()

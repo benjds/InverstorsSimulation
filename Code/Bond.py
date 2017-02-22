@@ -1,3 +1,7 @@
+import matplotlib.pyplot as plt
+import matplotlib
+import pandas as pd
+import numpy as np
 
 ####################################
 #           Bond Class             #
@@ -6,8 +10,8 @@
 #@Aim: Represent a short term or a long term bon with specifics criteria
 #@Initialize_date: 16-02-2017
 #@Updates:  - [18-02-2017]: Added profit attribute to classes ShortTerm and LongTerm
-#           - [22-02-2017]: Attributes updates + add compoundedInterest()
-#TODO: - Add a plot for a n years interest
+#           - [22-02-2017]: Attributes updates + add compoundedInterest() + Draw a plot for a bond
+#TODO: - Check the minimum Amount and Term
 
 
 class Bond(object):
@@ -18,6 +22,18 @@ class Bond(object):
         self.mAmount = 0
         self.interest = 0
 
+
+    def drawPlot(self):
+        plt.plot(self.interestSeries())
+        plt.ylabel('Interest time series')
+        plt.show()
+
+    def interestSeries(self):
+        seriesI = []
+        for i in range(1,self.term):
+            seriesI.append(self.coumpoundedInterest(i))
+
+        return seriesI
 
     def coumpoundedInterest(self, time):
         return self.amount * ( 1 + self.interest)**time
