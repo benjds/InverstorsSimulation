@@ -43,3 +43,4 @@ class LongTerm(Bond):
         self.mTerm = 5          # in years
         self.mAmount = 3000
         self.interest = 0.03
+
