@@ -9,9 +9,9 @@
 #@Updates:      - [00-00-2017] :
 
 class Stock(object):
-    def __init__(self, term, amount, name, numberB, buyDate):
+    def __init__(self, term, name, numberB, startDate, endDate):
         self.sTerm = term           # Period of the stock
-        self.sAmount = amount       # Amount invest
         self.sName = name           # Stock Name, ex: GOOGL
         self.sNumberB = numberB     # Number of stocks bought
-        self.sBuyDate = buyDate     # Date when they bought the stock
+        self.sStartDate = startDate     # Date when they bought the stock
+        self.sEndDate = endDate

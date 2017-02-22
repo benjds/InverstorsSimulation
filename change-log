@@ -4,3 +4,4 @@ Project : Investors Simulation
 - [16-02-2017] Project initialize
 - [16-02-2017] [1.0] Add Bond and Stock class
 - [17-02-2017] [1.1] Add Stock class
+- [22-02-2017] [1.2] Update of Bond class + CompoundedInterest() + BondMain file
