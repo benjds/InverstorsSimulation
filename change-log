@@ -7,4 +7,5 @@ Project : Investors Simulation
 - [22-02-2017] [1.2] Update of Bond class + CompoundedInterest() + BondMain file
 - [22-02-2017] [1.21] Draw plot for a bond
 - [22-02-2017] [1.22] Draw plot for a stock
+- [23-02-2017] [1.3] Update the class Bond, Stock and Investor + Draw better graph for bonds and stocks
 
