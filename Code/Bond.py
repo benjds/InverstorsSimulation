@@ -11,13 +11,15 @@ import numpy as np
 #@Initialize_date: 16-02-2017
 #@Updates:  - [18-02-2017]: Added profit attribute to classes ShortTerm and LongTerm
 #           - [22-02-2017]: Attributes updates + add compoundedInterest() + Draw a plot for a bond
-#           - [23-02-2017]: Add function getMinAmount()
+#           - [23-02-2017]: Add function getMinAmount() + whoIAm()
 #TODO: - Check the minimum Amount and Term
+#      - Implement new method with only profit
 
 
 class Bond(object):
-    def __init__(self, amount, term):
+    def __init__(self, amount, term, start_date):
         self._amount = amount
+        self._start_date = start_date
         self._term = term
         self._mTerm = 0
         self._mAmount = 0
@@ -49,6 +51,34 @@ class Bond(object):
 
         return seriesI
 
+    def addOneMonth(self,current_date):
+        date = str.split(current_date, '-')
+
+        if(int(date[1]) == 12) :
+            date[0] = str(int(date[0]) + 1)
+            date[1] = '1'
+        else:
+            date[1] = str(int(date[1]) + 1)
+
+        return str(date[0] + '-' + date[1].zfill(2) + '-' + date[2].zfill(2))
+
+    def interestSeriesComplete(self):
+        seriesI = [[],[]]
+        date = str.split(self._start_date, '/')
+        first_date = date[2] + '-' + date[1] + '-' + date[0]
+
+        seriesI[0].append(first_date)
+        seriesI[1].append(self.coumpoundedInterest(0))
+        nbMM = 12 * self._term
+        currentDate = first_date
+
+        for i in range(1,nbMM):
+            currentDate = self.addOneMonth(currentDate)
+            seriesI[0].append(currentDate)
+            seriesI[1].append(self.coumpoundedInterest(i, (1/12)))
+
+        return seriesI
+
     def interestSeriesByTime(self, Period):
         seriesI = []
         for i in range(0, Period):
@@ -56,21 +86,24 @@ class Bond(object):
 
         return seriesI
 
-    def coumpoundedInterest(self, time):
-        return self._amount * ( 1 + self._interest)**time
+    def coumpoundedInterest(self, time, n=1):
+        return self._amount * ( 1 + self._interest)**(time * n)
 
 
     # GETTER & SETTER
     def getMinAmount(self):
         return self._mAmount
 
+    def whoIAm(self):
+        return 'bond'
+
 #------
 
 # Short Term Bond, extends Bond
 
 class ShortTerm(Bond):
-    def __init__(self, amount, term):
-        super(ShortTerm, self).__init__(amount, term)
+    def __init__(self, amount, term, start_date):
+        super(ShortTerm, self).__init__(amount, term, start_date)
         self._mTerm = 2          # in years
         self._mAmount = 1000
         self._interest = 0.01
@@ -79,9 +112,10 @@ class ShortTerm(Bond):
 # Long Term Bond, extends Bond
 
 class LongTerm(Bond):
-    def __init__(self, amount, term):
-        super(LongTerm, self).__init__(amount, term)
+    def __init__(self, amount, term, start_date):
+        super(LongTerm, self).__init__(amount, term, start_date)
         self._mTerm = 5          # in years
         self._mAmount = 3000
         self._interest = 0.03
+
 

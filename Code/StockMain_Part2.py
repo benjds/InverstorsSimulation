@@ -26,6 +26,8 @@ list_stock.append(Stock.Stock('MS', 4, Start, End))
 list_stock.append(Stock.Stock('IBM', 4, Start, End))
 list_stock.append(Stock.Stock('FDX', 4, Start, End))
 
+#print("Stock")
+#print(list_stock[0].data)
 
 data = []
 

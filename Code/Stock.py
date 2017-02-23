@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 #@Aim: Represent a stock on a market
 #@Initialize_date: 16-02-2017
 #@Updates:      - [22-02-2017] : Manage the datas get back and draw plot
-#               - [23-02-2017]: add functions => selectDayPrice(), maxStockAvailable(), amountInvest()
+#               - [23-02-2017]: add functions => selectDayPrice(), maxStockAvailable(), amountInvest(), setNumberB()
+#TODO: - Optimize the data get back
 
 class Stock(object):
 
@@ -32,11 +33,16 @@ class Stock(object):
         dates = []
 
         for x in range(len(self.data )):
-            newdate = str(self.data .index[x])
+            newdate = str(self.data.index[x])
             newdate = newdate[0:10]
             dates.append(newdate)
 
         self.data['Dates'] = dates
+
+
+
+    def whoIAm(self):
+        return 'stock'
 
 
 
@@ -47,7 +53,7 @@ class Stock(object):
 
 
     def selectDayPrice(self):
-        return (self.data.ix[self.data['Dates'][0]]['Close'])
+        return (self.data.ix[self.data['Dates'][0]]['High'])
 
 
     def maxStockAvailable(self, budget):
@@ -61,3 +67,16 @@ class Stock(object):
 
     def amountInvest(self):
         return self.sNumberB * self.selectDayPrice()
+
+    def interestSeriesByTime(self):
+        closes = []
+
+        for x in range(len(self.data)):
+            close = self.data['Close'][x]
+            close = (close - self.selectDayPrice()) * self.sNumberB
+            closes.append(close)
+
+        self.data['Interest'] = closes
+
+    def setNumberB(self, value):
+        self.sNumberB = value
