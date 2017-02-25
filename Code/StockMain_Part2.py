@@ -35,7 +35,6 @@ data = []
 for i in range(0,9):
     data.append(go.Scatter( x=list_stock[i].data['Dates'], y=list_stock[i].data['High'], name=list_stock[i].sTicker))
 
-
 plotpath = os.path.abspath("../Results/final_plot.html")
 
 #Draw the graph

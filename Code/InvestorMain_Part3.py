@@ -1,6 +1,4 @@
 from Code import Investor
-from matplotlib import style
-import matplotlib.pyplot as plt
 import plotly
 import plotly.graph_objs as go
 import os
@@ -9,43 +7,60 @@ import os
 #           Part 3: Investors           #
 #########################################
 
+Numbers_of_investors = 10
+Budget = 10000
 
 
-# TEST
 
 #Defensive investor
 
-Investor_1 = Investor.Defensive_Investor(100000,'01/03/2008','01/02/2015')
+defensive_investors = []
 
-Investor_1.invest()
+#create the 1000 defensive investor
+for i in range(0,Numbers_of_investors):
+    new_Investor = Investor.Defensive_Investor(Budget,'01/03/2011','15/02/2015')
+    new_Investor.invest()
+    defensive_investors.append(new_Investor)
 
-# Defensive Investor => Looks Good !
+
+model_defensive_investor_series = Investor.mergeInvestorsSeries(defensive_investors,Numbers_of_investors)
+
+
+######################
 
 #Aggressive investor
 
-Investor_2 = Investor.Aggressive_Investor(100000,'01/03/2008','01/02/2015')
+aggressive_investors = []
 
-Investor_2.invest()
+for i in range(0,Numbers_of_investors):
+    new_Investor = Investor.Aggressive_Investor(Budget,'01/03/2011','15/02/2015')
+    new_Investor.invest()
+    aggressive_investors.append(new_Investor)
 
-#Investor_2.profitReturnSeries()
+
+model_aggressive_investor_series = Investor.mergeInvestorsSeries(aggressive_investors,Numbers_of_investors)
 
 #Mixed Investor
 
-Investor_3 = Investor.Mixed_Investor(100000,'01/03/2008','01/02/2015')
+mixed_investors = []
 
-Investor_3.invest()
+for i in range(0,Numbers_of_investors):
+    new_Investor = Investor.Mixed_Investor(Budget,'01/03/2011','15/02/2015')
+    new_Investor.invest()
+    mixed_investors.append(new_Investor)
 
-#Investor_3.profitReturnSeries()
+model_mixed_investor_series = Investor.mergeInvestorsSeries(mixed_investors,Numbers_of_investors)
+
 
 
 
 ## MODELLING INVESTOR
 
-
 data = []
-data.append(go.Scatter(y=Investor_1.profitReturnSeries()[1], x=Investor_1.profitReturnSeries()[0], name='Investor 1 (Defensive)'))
-data.append(go.Scatter(y=Investor_2.profitReturnSeries()[1], x=Investor_2.profitReturnSeries()[0], name='Investor 2 (Aggressive)'))
-data.append(go.Scatter(y=Investor_3.profitReturnSeries()[1], x=Investor_3.profitReturnSeries()[0], name='Investor 3 (Mixed)'))
+
+data.append(go.Scatter(y=model_defensive_investor_series[1], x=model_defensive_investor_series[0], name='Investor Defensive (' + str(Numbers_of_investors) + ')'))
+data.append(go.Scatter(y=model_aggressive_investor_series[1], x=model_aggressive_investor_series[0], name='Investor Aggressive (' + str(Numbers_of_investors) + ')'))
+data.append(go.Scatter(y=model_mixed_investor_series[1], x=model_mixed_investor_series[0], name='Investor Mixed (' + str(Numbers_of_investors) + ')'))
 
 plotpath = os.path.abspath("../Results/Invest_modelling.html")
 

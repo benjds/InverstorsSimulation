@@ -12,7 +12,37 @@ import matplotlib.pyplot as plt
 #@Initialize_date: 16-02-2017
 #@Updates:      - [22-02-2017] : Manage the datas get back and draw plot
 #               - [23-02-2017]: add functions => selectDayPrice(), maxStockAvailable(), amountInvest(), setNumberB()
+#               - [25-02-2017]: load the data just once
+
 #TODO: - Optimize the data get back
+
+
+#AAPL = web.DataReader('AAPL', 'google')
+#GOOGLE = web.DataReader('GOOGL', 'google')
+#YHOO = web.DataReader('YHOO', 'google')
+#AXP = web.DataReader('AXP', 'google')
+#XOM = web.DataReader('XOM', 'google')
+#KO = web.DataReader('KO', 'google')
+#NOK = web.DataReader('NOK', 'google')
+#MS = web.DataReader('MS', 'google')
+#IBM = web.DataReader('IBM', 'google')
+#FDX = web.DataReader('GOOGL', 'google')
+start = datetime.datetime(2005, 1, 1)
+end = datetime.datetime(2016, 1, 1)
+
+options = {'AAPL' : web.DataReader('AAPL', 'google', start, end),
+           'GOOGL' : web.DataReader('GOOGL', 'google', start, end),
+           'YHOO' : web.DataReader('YHOO', 'google', start, end),
+           'AXP' : web.DataReader('AXP', 'google', start, end),
+           'XOM' : web.DataReader('XOM', 'google', start, end),
+           'KO' : web.DataReader('KO', 'google', start, end),
+           'NOK' : web.DataReader('NOK', 'google', start, end),
+           'MS' : web.DataReader('MS', 'google', start, end),
+           'IBM' : web.DataReader('IBM', 'google', start, end),
+           'FDX' : web.DataReader('FDX', 'google', start, end)
+}
+
+print("Stock data imported !")
 
 class Stock(object):
 
@@ -28,8 +58,8 @@ class Stock(object):
         self.start = datetime.datetime(int(self.sDate[2]), int(self.sDate[1]), int(self.sDate[0]))
         self.end = datetime.datetime(int(self.eDate[2]), int(self.eDate[1]), int(self.eDate[0]))
 
-        self.data = web.DataReader(ticker, 'google', self.start, self.end)
-
+        #self.data = web.DataReader(ticker, 'google', self.start, self.end)
+        self.data = options[ticker]
         dates = []
 
         for x in range(len(self.data )):
@@ -38,7 +68,7 @@ class Stock(object):
             dates.append(newdate)
 
         self.data['Dates'] = dates
-
+        self.data = self.data.truncate(self.start, self.end)
 
 
     def whoIAm(self):
@@ -72,8 +102,8 @@ class Stock(object):
         closes = []
 
         for x in range(len(self.data)):
-            close = self.data['Close'][x]
-            close = (close - self.selectDayPrice()) * self.sNumberB
+            close = self.data['High'][x]
+            close = (close) * self.sNumberB
             closes.append(close)
 
         self.data['Interest'] = closes

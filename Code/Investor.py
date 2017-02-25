@@ -8,7 +8,8 @@ from Code import Stock
 #@Aim: Represent different type of investors
 #@Initialize_date: 17-02-2017
 #@Updates:      - [23-02-2017] : Create the function invest for the Defensive and Aggressive Investors
-#TODO: - Add a method in order to sum all the data series
+#               - [25-02-2017] : Create a method in order to merge different data series
+
 
 
 class Investor(object):
@@ -39,12 +40,9 @@ class Defensive_Investor(Investor):
 
         Term =  year_e - year_s
 
-        print('---------------------')
-        print('Defensive Inv Log')
-        print('---------------------')
 
         while self.budget >= STBond.getMinAmount() :
-            print(self.budget)
+
             choice = random.randint(0, 1)
 
             if(self.budget < LTBond.getMinAmount()):
@@ -64,7 +62,7 @@ class Defensive_Investor(Investor):
             #End If
 
         #End while
-        print(self.budget)
+
     #-----
 
     def profitReturnSeries(self):
@@ -100,9 +98,7 @@ class Aggressive_Investor(Investor):
         super(Aggressive_Investor, self).__init__(budget, startDate, endDate)
 
     def invest(self):
-        print('---------------------')
-        print('Aggressive Inv Log')
-        print('---------------------')
+
 
         while self.budget >= 100 :
             choiceS = random.randint(0, 9)
@@ -120,7 +116,6 @@ class Aggressive_Investor(Investor):
                 self.portfolio.append(stockToBuy)
                 self.budget = self.budget - stockToBuy.amountInvest()
 
-            print(self.budget)
         #End While
 
     #End invest
@@ -137,12 +132,18 @@ class Aggressive_Investor(Investor):
             myStock = self.portfolio[i]
             myStock.interestSeriesByTime()
 
-            for j in range(0, len(myStock.data['Dates'])):
+            if (i == 0):
+                length = len(myStock.data['Dates'])
+            else:
+                length = min(len(myStock.data['Dates']), len(series[0]))
+
+            for j in range(0, length ):
                 if(i == 0):
                     series[0].append(myStock.data['Dates'][j])
                     series[1].append(myStock.data['Interest'][j])
                 else:
-                    series[1].append(series[1][j] + myStock.data['Interest'][j])
+                    if(myStock.data['Dates'][j]== series[0][j]):
+                        series[1][j] = series[1][j] + myStock.data['Interest'][j]
 
                 #End If
 
@@ -163,9 +164,6 @@ class Mixed_Investor(Investor):
 
 
     def invest(self):
-        print('---------------------')
-        print('Mixed Inv Log')
-        print('---------------------')
 
         #Default Bond
         STBond = Bond.ShortTerm(0, 0, 0)
@@ -219,7 +217,6 @@ class Mixed_Investor(Investor):
                 #End if
             #End If
 
-            print(self.budget)
         #End while
 
 
@@ -237,12 +234,17 @@ class Mixed_Investor(Investor):
                 myStock = self.portfolio[i]
                 myStock.interestSeriesByTime()
 
-                for j in range(0, len(myStock.data['Dates'])):
+                if(firstDraw):
+                    length = len(myStock.data['Dates'])
+                else:
+                    length = min(len(myStock.data['Dates']), len(series[0]))
+
+                for j in range(0, length):
                     if (firstDraw):
                         series[0].append(myStock.data['Dates'][j])
                         series[1].append(myStock.data['Interest'][j])
                     else:
-                        series[1].append(series[1][j] + myStock.data['Interest'][j])
+                        series[1][j] = series[1][j] + myStock.data['Interest'][j]
 
                     # End If
 
@@ -288,3 +290,38 @@ class Mixed_Investor(Investor):
 
 
         return series
+
+#### STATIC METHODS ####
+
+def mergeInvestorsSeries(list_of_investors, number_investors):
+    # Now do the sum of each values
+    # initialize the final series
+    model_investor_series = [[], []]
+
+    for i in range(0, number_investors):
+
+        list_value = list_of_investors[i].profitReturnSeries()[1]
+
+        if (i == 0):
+            list_date = list_of_investors[i].profitReturnSeries()[0]
+            length = len(list_date)
+        else:
+            length = min(len(list_value),len(model_investor_series[0]))
+
+        for j in range(0, length):
+            if (i == 0):
+                model_investor_series[0].append(list_date[j])
+                model_investor_series[1].append(list_value[j])
+            else:
+                model_investor_series[1][j] = model_investor_series[1][j] + list_value[j]
+                # End if
+                # End for
+    # End for
+
+    # Divide the value by the number of investors
+
+    for k in range(0, len(model_investor_series[1])):
+        model_investor_series[1][k] = model_investor_series[1][k] / number_investors
+    #End for
+
+    return model_investor_series
