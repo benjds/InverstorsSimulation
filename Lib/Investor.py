@@ -1,6 +1,8 @@
 import random
-from Code import Bond
-from Code import Stock
+from Lib import Bond
+from Lib import Stock
+import pandas as pd
+
 ####################################
 #         Investor Class           #
 ####################################
@@ -9,6 +11,7 @@ from Code import Stock
 #@Initialize_date: 17-02-2017
 #@Updates:      - [23-02-2017] : Create the function invest for the Defensive and Aggressive Investors
 #               - [25-02-2017] : Create a method in order to merge different data series
+#               - [25-02-2017] : Optimize function with Dataframe computation
 
 
 
@@ -19,7 +22,6 @@ class Investor(object):
         self.endDate = endDate
         self.portfolio = []
         self.default_stock = ['AAPL', 'GOOGL', 'YHOO', 'AXP', 'XOM', 'KO', 'NOK', 'MS', 'IBM', 'FDX']
-
 
 
 
@@ -65,30 +67,13 @@ class Defensive_Investor(Investor):
 
     #-----
 
+
     def profitReturnSeries(self):
+        Data = pd.DataFrame(index=self.portfolio[0].interestSeriesComplete().index, data=self.portfolio[0].interestSeriesComplete()['Interest'], columns=['Interest'])
+        for i in range(1, len(self.portfolio)):
+            Data = Data.add(self.portfolio[i].interestSeriesComplete(), fill_value=0)
 
-        series = [[],[]]
-
-        for i in range(0,len(self.portfolio)) :
-            #print(self.portfolio[i].whoIAm())
-
-            myBond = self.portfolio[i]
-
-            list_return = myBond.interestSeriesComplete()
-
-            for j in range(0, len(list_return[0])):
-                if(i == 0):
-                    series[0].append(list_return[0][j])
-                    series[1].append(list_return[1][j])
-                else:
-                    series[1][j] = series[1][j] + list_return[1][j]
-
-                #End if
-
-            #End For
-
-        return series
-
+        return Data
 
 
 # Aggressive_Investor, extends Investor
@@ -113,6 +98,7 @@ class Aggressive_Investor(Investor):
             stockToBuy.setNumberB(choiceNb)
 
             if(choiceNb != 0):
+                stockToBuy.interestSeriesByTime()
                 self.portfolio.append(stockToBuy)
                 self.budget = self.budget - stockToBuy.amountInvest()
 
@@ -122,37 +108,14 @@ class Aggressive_Investor(Investor):
 
 
     def profitReturnSeries(self):
+        Data = pd.DataFrame(index=self.portfolio[0].interestSeriesComplete().index,
+                            data=self.portfolio[0].interestSeriesComplete()['Interest'], columns=['Interest'])
+        for i in range(1, len(self.portfolio)):
+            tmp_Data = pd.DataFrame(index=self.portfolio[i].interestSeriesComplete().index,
+                            data=self.portfolio[i].interestSeriesComplete()['Interest'], columns=['Interest'])
+            Data = Data.add(tmp_Data, fill_value=0)
 
-        series = [[],[]]
-
-        for i in range(0,len(self.portfolio)) :
-            #print(self.portfolio[i].whoIAm())
-
-            # We get back the bond instance
-            myStock = self.portfolio[i]
-            myStock.interestSeriesByTime()
-
-            if (i == 0):
-                length = len(myStock.data['Dates'])
-            else:
-                length = min(len(myStock.data['Dates']), len(series[0]))
-
-            for j in range(0, length ):
-                if(i == 0):
-                    series[0].append(myStock.data['Dates'][j])
-                    series[1].append(myStock.data['Interest'][j])
-                else:
-                    if(myStock.data['Dates'][j]== series[0][j]):
-                        series[1][j] = series[1][j] + myStock.data['Interest'][j]
-
-                #End If
-
-            #End For
-        #End For
-
-
-        return series
-
+        return Data
 
 
 
@@ -220,7 +183,7 @@ class Mixed_Investor(Investor):
         #End while
 
 
-    def profitReturnSeries(self):
+    def profitReturnSeries_Details(self):
 
         series = [[], []]
         firstDraw = True
@@ -245,6 +208,81 @@ class Mixed_Investor(Investor):
                         series[1].append(myStock.data['Interest'][j])
                     else:
                         series[1][j] = series[1][j] + myStock.data['Interest'][j]
+
+                    # End If
+
+                # End For
+
+                firstDraw = False
+            #End If
+
+        #End For
+
+        for i in range(0, len(self.portfolio)):
+            if (self.portfolio[i].whoIAm() == 'bond'):
+
+                myBond = self.portfolio[i]
+                list_return = myBond.interestSeriesComplete()
+
+                if(len(series[0])):
+                    for j in range(0, len(list_return[0])):
+
+                        for k in range(0, len(series[0])):
+                            date_tmp_1 = str.split(series[0][k],'-')
+                            date_tmp_2 = str.split(list_return[0][j],'-')
+                            if((date_tmp_1[0] == date_tmp_2[0]) & (date_tmp_1[1] == date_tmp_2[1])):
+                                series[1][k] = series[1][k] + list_return[1][j]
+                            #End if
+                        #End for
+
+                    # End For
+                else:
+                    for j in range(0, len(list_return[0])):
+                        if (i == 0):
+                            series[0].append(list_return[0][j])
+                            series[1].append(list_return[1][j])
+                        else:
+                            series[1][j] = series[1][j] + list_return[1][j]
+                        # End if
+
+                    # End For
+                #End if
+
+            #End if
+        #End For
+
+
+        return series
+
+    def profitReturnSeries(self):
+
+        series = [[], []]
+        firstDraw = True
+
+        for i in range(0, len(self.portfolio)):
+            # print(self.portfolio[i].whoIAm())
+
+
+            if(self.portfolio[i].whoIAm() == 'stock'):
+                # We get back the bond instance
+                myStock = self.portfolio[i]
+                myStock.interestSeriesByTime()
+
+                if(firstDraw):
+                    length = len(myStock.data['Dates'])
+                else:
+                    length = min(len(myStock.data['Dates']), len(series[0]))
+
+                for j in range(0, length):
+                    day = str.split(myStock.data['Dates'][j], '-')[2]
+
+                    if (day == '01'):
+                        if (firstDraw):
+                            series[0].append(myStock.data['Dates'][j])
+                            series[1].append(myStock.data['Interest'][j])
+                        else:
+                            series[1][j] = series[1][j] + myStock.data['Interest'][j]
+                        #End if
 
                     # End If
 
@@ -325,3 +363,21 @@ def mergeInvestorsSeries(list_of_investors, number_investors):
     #End for
 
     return model_investor_series
+
+
+
+def mergeInvestorsSeries_Dataframe(list_of_investors, number_investors):
+    # Now do the sum of each values
+    # initialize the final series
+
+    data_investors = list_of_investors[0].profitReturnSeries()
+    Data = pd.DataFrame(index= data_investors.index, data=data_investors['Interest'], columns=['Interest'])
+
+    for i in range(1, len(list_of_investors)):
+        data_investors = list_of_investors[i].profitReturnSeries()
+        Data = Data.add(data_investors)
+
+
+    Data['Interest'] = Data['Interest'] / number_investors
+
+    return Data

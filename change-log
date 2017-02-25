@@ -10,3 +10,4 @@ Project : Investors Simulation
 - [23-02-2017] [1.3] Update the class Bond, Stock and Investor + Draw better graph for bonds and stocks
 - [23-02-2017] [1.31] Update the investor class + draw 3 types of investors
 - [25-02-2017] [1.4] Generate the modelling for 10 defensive, aggressive and mixed investors (not 1000 for the moment)
+- [25-02-2017] [1.41] Generate the modelling for 1000 defensive and aggressive investors (Dataframe optimize)

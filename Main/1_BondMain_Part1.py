@@ -1,4 +1,4 @@
-from Code import Bond
+from Lib import Bond
 import plotly
 import plotly.graph_objs as go
 import os
@@ -15,8 +15,8 @@ STBond = Bond.ShortTerm(1000, 100, '01/01/2005')
 LTBond = Bond.LongTerm(3000, 100, '01/01/2005')
 
 data = []
-data.append(go.Scatter(y=STBond.interestSeriesComplete()[1], x=STBond.interestSeriesComplete()[0], name='Short Term Interest'))
-data.append(go.Scatter(y=LTBond.interestSeriesComplete()[1], x=LTBond.interestSeriesComplete()[0], name='Long Term Interest'))
+data.append(go.Scatter(y=STBond.interestSeriesComplete()['Interest'], x=STBond.interestSeriesComplete().index, name='Short Term Interest'))
+data.append(go.Scatter(y=LTBond.interestSeriesComplete()['Interest'], x=LTBond.interestSeriesComplete().index, name='Long Term Interest'))
 
 
 #STBond.drawPlot()

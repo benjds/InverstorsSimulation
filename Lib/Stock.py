@@ -13,20 +13,10 @@ import matplotlib.pyplot as plt
 #@Updates:      - [22-02-2017] : Manage the datas get back and draw plot
 #               - [23-02-2017]: add functions => selectDayPrice(), maxStockAvailable(), amountInvest(), setNumberB()
 #               - [25-02-2017]: load the data just once
+#               - [25-02-2017]: Optimize the dataframe managing
 
-#TODO: - Optimize the data get back
 
 
-#AAPL = web.DataReader('AAPL', 'google')
-#GOOGLE = web.DataReader('GOOGL', 'google')
-#YHOO = web.DataReader('YHOO', 'google')
-#AXP = web.DataReader('AXP', 'google')
-#XOM = web.DataReader('XOM', 'google')
-#KO = web.DataReader('KO', 'google')
-#NOK = web.DataReader('NOK', 'google')
-#MS = web.DataReader('MS', 'google')
-#IBM = web.DataReader('IBM', 'google')
-#FDX = web.DataReader('GOOGL', 'google')
 start = datetime.datetime(2005, 1, 1)
 end = datetime.datetime(2016, 1, 1)
 
@@ -60,14 +50,6 @@ class Stock(object):
 
         #self.data = web.DataReader(ticker, 'google', self.start, self.end)
         self.data = options[ticker]
-        dates = []
-
-        for x in range(len(self.data )):
-            newdate = str(self.data.index[x])
-            newdate = newdate[0:10]
-            dates.append(newdate)
-
-        self.data['Dates'] = dates
         self.data = self.data.truncate(self.start, self.end)
 
 
@@ -83,7 +65,8 @@ class Stock(object):
 
 
     def selectDayPrice(self):
-        return (self.data.ix[self.data['Dates'][0]]['High'])
+        return (self.data.loc[self.data.index[0], 'High'])
+
 
 
     def maxStockAvailable(self, budget):
@@ -99,14 +82,11 @@ class Stock(object):
         return self.sNumberB * self.selectDayPrice()
 
     def interestSeriesByTime(self):
-        closes = []
 
-        for x in range(len(self.data)):
-            close = self.data['High'][x]
-            close = (close) * self.sNumberB
-            closes.append(close)
-
-        self.data['Interest'] = closes
+        self.data['Interest'] = self.data['High'] * self.sNumberB
 
     def setNumberB(self, value):
         self.sNumberB = value
+
+    def interestSeriesComplete(self):
+        return self.data
