@@ -3,6 +3,7 @@ import matplotlib
 import pandas as pd
 import numpy as np
 import datetime
+from datetime import date, timedelta as td
 
 ####################################
 #           Bond Class             #
@@ -19,10 +20,10 @@ import datetime
 
 
 class Bond(object):
-    def __init__(self, amount, term, start_date):
+    def __init__(self, amount, start_date, end_date):
         self._amount = amount
         self._start_date = start_date
-        self._term = term
+        self._end_date = end_date
         self._mTerm = 0
         self._mAmount = 0
         self._interest = 0
@@ -35,71 +36,31 @@ class Bond(object):
         if(self._amount < self._mAmount):
             self._amount = self._mAmount
 
-        if (self._term < self._mTerm):
-            self._term = self._mTerm
 
-
-
-    def drawPlot(self):
-        plt.plot(self.interestSeries())
-        plt.ylabel('Interest time series')
-        plt.show()
-
-
-    def interestSeries(self):
-        seriesI = []
-        for i in range(0,self._term):
-            seriesI.append(self.coumpoundedInterest(i))
-
-        return seriesI
-
-    def addOneMonth(self,current_date):
-        date = str.split(current_date, '-')
-
-        if(int(date[1]) == 12) :
-            date[0] = str(int(date[0]) + 1)
-            date[1] = '1'
-        else:
-            date[1] = str(int(date[1]) + 1)
-
-        return str(date[0] + '-' + date[1].zfill(2) + '-' + date[2].zfill(2))
 
     def interestSeriesComplete(self):
         Dates = []
         Interest = []
-        date = str.split(self._start_date, '/')
-        tmp_date = date[2] + '-' + date[1] + '-' + date[0]
-        first_date = datetime.datetime(int(date[2]),int(date[1]),int(date[0]))
 
-        Dates.append(first_date)
-        Interest.append(self.coumpoundedInterest(0))
+        date_start = str.split(self._start_date, '/')
+        date_start = date(int(date_start[2]), int(date_start[1]), int(date_start[0]))
 
-        nbMM = 12 * self._term
-        currentDate = tmp_date
+        date_end = str.split(self._end_date, '/')
+        date_end = date(int(date_end[2]), int(date_end[1]), int(date_end[0]))
 
-        for i in range(1,nbMM):
-            currentDate = self.addOneMonth(currentDate)
-            #seriesI[0].append(currentDate)
-            #seriesI[1].append(self.coumpoundedInterest(i, (1/12)))
-            date = str.split(currentDate, '-')
-            Dates.append(datetime.datetime(int(date[0]),int(date[1]),int(date[2])))
-            Interest.append(self.coumpoundedInterest(i, (1/12)))
+        delta = date_end - date_start
+        for i in range(delta.days + 1):
+            current_date = date_start + td(days=i)
+            Dates.append(current_date)
+            Interest.append(self.coumpoundedInterest(i, (1 / 365)))
 
         seriesI = pd.DataFrame(data= Interest, columns=['Interest'], index=Dates)
 
         return seriesI
 
-
-
-    def interestSeriesByTime(self, Period):
-        seriesI = []
-        for i in range(0, Period):
-            seriesI.append(self.coumpoundedInterest(i))
-
-        return seriesI
-
     def coumpoundedInterest(self, time, n=1):
         return self._amount * ( 1 + self._interest)**(time * n)
+
 
 
     # GETTER & SETTER
@@ -114,8 +75,8 @@ class Bond(object):
 # Short Term Bond, extends Bond
 
 class ShortTerm(Bond):
-    def __init__(self, amount, term, start_date):
-        super(ShortTerm, self).__init__(amount, term, start_date)
+    def __init__(self, amount, start_date, end_date):
+        super(ShortTerm, self).__init__(amount, start_date, end_date)
         self._mTerm = 2          # in years
         self._mAmount = 1000
         self._interest = 0.01
@@ -124,8 +85,8 @@ class ShortTerm(Bond):
 # Long Term Bond, extends Bond
 
 class LongTerm(Bond):
-    def __init__(self, amount, term, start_date):
-        super(LongTerm, self).__init__(amount, term, start_date)
+    def __init__(self, amount, start_date, end_date):
+        super(LongTerm, self).__init__(amount, start_date, end_date)
         self._mTerm = 5          # in years
         self._mAmount = 3000
         self._interest = 0.03

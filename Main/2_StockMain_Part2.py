@@ -2,6 +2,7 @@ from Lib import Stock
 import plotly
 import plotly.graph_objs as go
 import os
+import plotly.plotly as py
 
 ######################################
 #           Part 2: Stocks           #
@@ -41,3 +42,4 @@ plotpath = os.path.abspath("../Results/final_plot.html")
 #Draw the graph
 fig = go.Figure(data=data)
 plotly.offline.plot(fig, filename=plotpath)
+#py.iplot(fig)

@@ -2,15 +2,16 @@ from Lib import Investor
 import plotly
 import plotly.graph_objs as go
 import os
+import plotly.plotly as py
 
 #########################################
 #           Part 3: Investors           #
 #########################################
 
-Numbers_of_investors = 1000
+Numbers_of_investors = 10
 Budget = 10000
-start = '01/03/2011'
-end = '01/03/2015'
+start = '01/01/2011'
+end = '31/12/2015'
 
 
 #Defensive investor
@@ -68,5 +69,5 @@ plotpath = os.path.abspath("../Results/Invest_modelling.html")
 
 #Draw the graph
 fig = go.Figure(data=data)
-plotly.offline.plot(fig, filename=plotpath)
-
+#plotly.offline.plot(fig, filename=plotpath)
+py.iplot(fig)

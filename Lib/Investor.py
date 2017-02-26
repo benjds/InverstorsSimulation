@@ -12,6 +12,7 @@ import pandas as pd
 #@Updates:      - [23-02-2017] : Create the function invest for the Defensive and Aggressive Investors
 #               - [25-02-2017] : Create a method in order to merge different data series
 #               - [25-02-2017] : Optimize function with Dataframe computation
+#               - [26-02-2017] : Update function merge and join data
 
 
 
@@ -48,16 +49,16 @@ class Defensive_Investor(Investor):
             choice = random.randint(0, 1)
 
             if(self.budget < LTBond.getMinAmount()):
-                newShortT = Bond.ShortTerm(1000, Term, self.startDate)
+                newShortT = Bond.ShortTerm(1000, self.startDate, self.endDate)
                 self.budget = self.budget - 1000
                 self.portfolio.append(newShortT)
             else:
                 if(choice == 0):
-                    newShortT = Bond.ShortTerm(1000, Term, self.startDate)
+                    newShortT = Bond.ShortTerm(1000, self.startDate, self.endDate)
                     self.budget = self.budget - 1000
                     self.portfolio.append(newShortT)
                 else:
-                    newLongT = Bond.LongTerm(3000, Term, self.startDate)
+                    newLongT = Bond.LongTerm(3000, self.startDate, self.endDate)
                     self.budget = self.budget - 3000
                     self.portfolio.append(newLongT)
                 #End If
@@ -146,16 +147,16 @@ class Mixed_Investor(Investor):
                 choice = random.randint(0, 1)
 
                 if (self.budget < LTBond.getMinAmount()):
-                    newShortT = Bond.ShortTerm(1000, Term, self.startDate)
+                    newShortT = Bond.ShortTerm(1000, self.startDate, self.endDate)
                     self.budget = self.budget - 1000
                     self.portfolio.append(newShortT)
                 else:
                     if (choice == 0):
-                        newShortT = Bond.ShortTerm(1000, Term, self.startDate)
+                        newShortT = Bond.ShortTerm(1000, self.startDate, self.endDate)
                         self.budget = self.budget - 1000
                         self.portfolio.append(newShortT)
                     else:
-                        newLongT = Bond.LongTerm(3000, Term, self.startDate)
+                        newLongT = Bond.LongTerm(3000, self.startDate, self.endDate)
                         self.budget = self.budget - 3000
                         self.portfolio.append(newLongT)
                     # End If
@@ -231,6 +232,7 @@ class Mixed_Investor(Investor):
 
 
         return Data
+
 
 #### STATIC METHODS ####
 
