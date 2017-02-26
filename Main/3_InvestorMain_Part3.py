@@ -7,10 +7,10 @@ import os
 #           Part 3: Investors           #
 #########################################
 
-Numbers_of_investors = 100
-Budget = 100000
+Numbers_of_investors = 1000
+Budget = 10000
 start = '01/03/2011'
-end = '15/02/2015'
+end = '01/03/2015'
 
 
 #Defensive investor
@@ -43,14 +43,14 @@ model_aggressive_investor_series = Investor.mergeInvestorsSeries_Dataframe(aggre
 
 #Mixed Investor
 
-#mixed_investors = []
+mixed_investors = []
 
-#for k in range(0,Numbers_of_investors):
-#    new_Investor = Investor.Mixed_Investor(Budget, start, end)
-#    new_Investor.invest()
-#    mixed_investors.append(new_Investor)
+for k in range(0,Numbers_of_investors):
+    new_Investor = Investor.Mixed_Investor(Budget, start, end)
+    new_Investor.invest()
+    mixed_investors.append(new_Investor)
 
-#model_mixed_investor_series = Investor.mergeInvestorsSeries(mixed_investors,Numbers_of_investors)
+model_mixed_investor_series = Investor.mergeInvestorsSeries_Dataframe(mixed_investors,Numbers_of_investors)
 
 
 
@@ -61,6 +61,7 @@ data = []
 
 data.append(go.Scatter(y=model_defensive_investor_series['Interest'], x=model_defensive_investor_series.index, name='Investor Defensive (' + str(Numbers_of_investors) + ')'))
 data.append(go.Scatter(y=model_aggressive_investor_series['Interest'], x=model_aggressive_investor_series.index, name='Investor Aggressive (' + str(Numbers_of_investors) + ')'))
+data.append(go.Scatter(y=model_mixed_investor_series['Interest'], x=model_mixed_investor_series.index, name='Investor Mixed (' + str(Numbers_of_investors) + ')'))
 #data.append(go.Scatter(y=model_mixed_investor_series[1], x=model_mixed_investor_series[0], name='Investor Mixed (' + str(Numbers_of_investors) + ')'))
 
 plotpath = os.path.abspath("../Results/Invest_modelling.html")
