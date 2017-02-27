@@ -2,13 +2,16 @@ from Lib import Investor
 import plotly
 import plotly.graph_objs as go
 import os
-import plotly.plotly as py
+import time
+start_time = time.time()
 
 #########################################
 #           Part 3: Investors           #
 #########################################
 
-Numbers_of_investors = 10
+
+### Warning, Modelling 1000 investors could be time consuming ... ;)
+Numbers_of_investors = 10  #But you can change the number of investors here
 Budget = 10000
 start = '01/01/2011'
 end = '31/12/2015'
@@ -69,5 +72,6 @@ plotpath = os.path.abspath("../Results/Invest_modelling.html")
 
 #Draw the graph
 fig = go.Figure(data=data)
-#plotly.offline.plot(fig, filename=plotpath)
-py.iplot(fig)
+plotly.offline.plot(fig, filename=plotpath)
+#py.iplot(fig)
+print("--- %s seconds ---" % (time.time() - start_time))

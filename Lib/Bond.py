@@ -1,8 +1,5 @@
-import matplotlib.pyplot as plt
-import matplotlib
+
 import pandas as pd
-import numpy as np
-import datetime
 from datetime import date, timedelta as td
 
 ####################################
@@ -15,8 +12,8 @@ from datetime import date, timedelta as td
 #           - [22-02-2017]: Attributes updates + add compoundedInterest() + Draw a plot for a bond
 #           - [23-02-2017]: Add function getMinAmount() + whoIAm()
 #           - [25-02-2017]: Use of dataframe instead of list
+#           - [27-02-2017]: Clean the code and add comment
 #TODO: - Check the minimum Amount and Term
-#      - Implement new method with only profit
 
 
 class Bond(object):
@@ -31,13 +28,20 @@ class Bond(object):
         self.checkValue() # Check the minimum value f
 
 
-
+    # @FunctionName: checkValue()
+    # @Goal: Check the amount value
+    # @Parameters: - self, class instance
+    # @Return: None
     def checkValue(self):
         if(self._amount < self._mAmount):
             self._amount = self._mAmount
 
 
 
+    # @FunctionName: interestSeriesComplete()
+    # @Goal: Return the dataframe for a bond with the interest value
+    # @Parameters:  - self, class instance
+    # @Return:  A pandas Dataframe with an index and interest column
     def interestSeriesComplete(self):
         Dates = []
         Interest = []
@@ -58,15 +62,29 @@ class Bond(object):
 
         return seriesI
 
+    # @FunctionName: coumpoundedInterest()
+    # @Goal:  Compute the coumpounded interest
+    # @Parameters: - time, an integer value of the current period
+    #              - n, value of the type period (e.g. 1/12, monthly coumpounded)
+    # @Return:
     def coumpoundedInterest(self, time, n=1):
         return self._amount * ( 1 + self._interest)**(time * n)
 
 
 
     # GETTER & SETTER
+
+    # @FunctionName: getMinAmount()
+    # @Goal:  Get the value of the minimum value required for the bond
+    # @Parameters:  Self, class instance
+    # @Return:  An integer, amount of the minimum value required
     def getMinAmount(self):
         return self._mAmount
 
+    # @FunctionName: whoIAm()
+    # @Goal: Return the name of class type
+    # @Parameters: Self, class instance
+    # @Return: A string name of the class
     def whoIAm(self):
         return 'bond'
 

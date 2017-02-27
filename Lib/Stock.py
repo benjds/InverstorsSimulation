@@ -14,8 +14,7 @@ import matplotlib.pyplot as plt
 #               - [23-02-2017]: add functions => selectDayPrice(), maxStockAvailable(), amountInvest(), setNumberB()
 #               - [25-02-2017]: load the data just once
 #               - [25-02-2017]: Optimize the dataframe managing
-
-
+#               - [27-02-2017]: Clean the code and add comment
 
 start = datetime.datetime(2005, 1, 1)
 end = datetime.datetime(2016, 1, 1)
@@ -53,40 +52,76 @@ class Stock(object):
         self.data = self.data.truncate(self.start, self.end)
 
 
+
+    # @FunctionName: whoIAm()
+    # @Goal: Return the name of class type
+    # @Parameters: Self, class instance
+    # @Return: A string name of the class
     def whoIAm(self):
         return 'stock'
 
 
-
+    # @FunctionName: plotStock()
+    # @Goal: Make a simple plot
+    # @Parameters: Self, class instance
+    # @Return: None
     def plotStock(self):
         style.use('fivethirtyeight')
         self.data['High'].plot()
         plt.show()
 
 
+    # @FunctionName: selectDayPrice()
+    # @Goal: Give the first value of the stock
+    # @Parameters: Self, class instance
+    # @Return: None
     def selectDayPrice(self):
-        return (self.data.loc[self.data.index[0], 'High'])
+        return (self.data['High'][0])
 
 
-
+    # @FunctionName: maxStockAvailable()
+    # @Goal: Compute the maximum quantity of the stock available with a specific budget
+    # @Parameters: - Self, class instance
+    #              - budget, integer
+    # @Return: None
     def maxStockAvailable(self, budget):
-        #First find price
-        #dayPrice = self.data.ix[self.sDate[2] + '-' + self.sDate[1] + '-' + self.sDate[0]]['Close']
         dayPrice = self.selectDayPrice()
-        #print('day price = '+ str(dayPrice))
 
         return int(budget/dayPrice)
 
-
+    # @FunctionName: amountInvest()
+    # @Goal: Give the real value of the stock
+    # @Parameters: Self, class instance
+    # @Return: None
     def amountInvest(self):
         return self.sNumberB * self.selectDayPrice()
 
-    def interestSeriesByTime(self):
 
+    # @FunctionName: interestSeriesByTime()
+    # @Goal: Compute the value of the stock for each rows
+    # @Parameters: Self, class instance
+    # @Return: None
+    def interestSeriesByTime(self):
         self.data['Interest'] = self.data['High'] * self.sNumberB
 
+    # @FunctionName: setNumberB()
+    # @Goal: Setter of the attribut sNumberB
+    # @Parameters: Self, class instance
+    # @Return: None
     def setNumberB(self, value):
         self.sNumberB = value
 
+    # @FunctionName: interestSeriesComplete()
+    # @Goal: Getter of the attribut data
+    # @Parameters: Self, class instance
+    # @Return: None
     def interestSeriesComplete(self):
         return self.data
+
+
+    # @FunctionName: periodInterest()
+    # @Goal: Get a period interest for the given period
+    # @Parameters: Self, class instance
+    # @Return: None
+    def periodInterest(self):
+        return self.data['Interest'][len(self.data)-1] - self.data['Interest'][0]

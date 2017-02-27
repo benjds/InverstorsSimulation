@@ -4,13 +4,14 @@ import plotly.graph_objs as go
 from plotly import tools
 import os
 import plotly.plotly as py
+from Lib import Stock
 
 ###########################################
 #           Part 4: Simulations           #
 ###########################################
 
 
-Numbers_of_investors = 1000
+Numbers_of_investors = 100
 Budget = 10000
 Years = ['2005','2006','2007','2008','2009','2010','2011','2012','2013','2014']
 #Years = ['2005']
@@ -86,9 +87,51 @@ for x in range(0, len(Years)):
 
 plotpath = os.path.abspath("../Results/Invest_modelling_by_year.html")
 # Draw the graph
-#plotly.offline.plot(fig, filename=plotpath)
-py.iplot(fig)
+plotly.offline.plot(fig, filename=plotpath)
+#py.iplot(fig)
 
 
+### BEST STOCK IN 2007 #####
+
+
+list_stock = []
+
+
+Start = '01/01/2007'
+End = '31/12/2007'
+
+# Create a list of stock
+#AAPL, GOOGL, YHOO, AXP, XOM, KO, NOK, MS, IBM and FDX
+list_stock.append(Stock.Stock('GOOGL', 1, Start, End))
+list_stock.append(Stock.Stock('AAPL', 1, Start, End))
+list_stock.append(Stock.Stock('YHOO', 1, Start, End))
+list_stock.append(Stock.Stock('AXP', 1, Start, End))
+list_stock.append(Stock.Stock('XOM', 1, Start, End))
+list_stock.append(Stock.Stock('KO', 1, Start, End))
+list_stock.append(Stock.Stock('NOK', 1, Start, End))
+list_stock.append(Stock.Stock('MS', 1, Start, End))
+list_stock.append(Stock.Stock('IBM', 1, Start, End))
+list_stock.append(Stock.Stock('FDX', 1, Start, End))
+
+
+ticker = []
+value = []
+
+#add stock into a graph object
+for i in range(0,9):
+    list_stock[i].interestSeriesByTime()
+    ticker.append(list_stock[i].sTicker)
+    value.append(list_stock[i].periodInterest())
+
+
+data = [go.Bar( x=ticker, y=value)]
+plotpath = os.path.abspath("../Results/2007_stocks.html")
+
+layout = go.Layout(
+    title='Best stock in 2007',
+)
+#Draw the graph
+fig = go.Figure(data=data, layout= layout)
+plotly.offline.plot(fig, filename=plotpath)
 
 

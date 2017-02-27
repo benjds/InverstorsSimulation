@@ -25,8 +25,6 @@ class Investor(object):
         self.default_stock = ['AAPL', 'GOOGL', 'YHOO', 'AXP', 'XOM', 'KO', 'NOK', 'MS', 'IBM', 'FDX']
 
 
-
-
 # Defensive_Investor, extends Investor
 
 class Defensive_Investor(Investor):
@@ -67,7 +65,6 @@ class Defensive_Investor(Investor):
         #End while
 
     #-----
-
 
     def profitReturnSeries(self):
         Data = pd.DataFrame(index=self.portfolio[0].interestSeriesComplete().index, data=self.portfolio[0].interestSeriesComplete()['Interest'], columns=['Interest'])
@@ -221,6 +218,8 @@ class Mixed_Investor(Investor):
             if(firstDraw_S == False):
                 Data = DataB.join(DataS, how='inner', lsuffix='_l', rsuffix='_r')
                 Data['Interest'] = Data['Interest_l'] + Data['Interest_r']
+                Data.drop('Interest_l', 1, inplace=True)
+                Data.drop('Interest_r', 1, inplace=True)
 
             else:
                 Data = DataB

@@ -1,11 +1,10 @@
 from Lib import Bond
 import plotly
-import plotly.plotly as py
 import plotly.graph_objs as go
 import os
 
 
-plotly.tools.set_credentials_file(username='benjamin.dos-santos', api_key='V9FR6iFHXh7LLNDDLZ7G')
+#plotly.tools.set_credentials_file(username='benjamin.dos-santos', api_key='V9FR6iFHXh7LLNDDLZ7G')
 
 
 #########################################################

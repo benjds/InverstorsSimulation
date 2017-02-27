@@ -2,7 +2,6 @@ from Lib import Stock
 import plotly
 import plotly.graph_objs as go
 import os
-import plotly.plotly as py
 
 ######################################
 #           Part 2: Stocks           #
