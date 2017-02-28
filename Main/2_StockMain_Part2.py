@@ -41,3 +41,4 @@ plotpath = os.path.abspath("../Results/final_plot.html")
 #Draw the graph
 fig = go.Figure(data=data)
 plotly.offline.plot(fig, filename=plotpath)
+#py.iplot(fig)
