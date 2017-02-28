@@ -124,4 +124,4 @@ class Stock(object):
     # @Parameters: Self, class instance
     # @Return: None
     def periodInterest(self):
-        return self.data['Interest'][len(self.data)-1] - self.data['Interest'][0]
+        return ((self.data['Interest'][len(self.data)-1] - self.data['Interest'][0])/self.data['Interest'][0])*100
