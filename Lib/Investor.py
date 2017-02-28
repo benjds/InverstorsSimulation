@@ -31,6 +31,11 @@ class Defensive_Investor(Investor):
     def __init__(self, budget, startDate, endDate):
         super(Defensive_Investor, self).__init__(budget, startDate, endDate)
 
+
+    # @FunctionName: invest()
+    # @Goal: Simulate an investment with different kind of product
+    # @Parameters: Self, class instance
+    # @Return: None
     def invest(self):
         #Default Bond
         STBond = Bond.ShortTerm(0, 0, 0)
@@ -66,6 +71,10 @@ class Defensive_Investor(Investor):
 
     #-----
 
+    # @FunctionName: profitReturnSeries()
+    # @Goal: Generate a Dataframe concataining all the values of the product present in the portfolio
+    # @Parameters: Self, class instance
+    # @Return: A Dataframe
     def profitReturnSeries(self):
         Data = pd.DataFrame(index=self.portfolio[0].interestSeriesComplete().index, data=self.portfolio[0].interestSeriesComplete()['Interest'], columns=['Interest'])
         for i in range(1, len(self.portfolio)):
@@ -80,11 +89,16 @@ class Aggressive_Investor(Investor):
     def __init__(self, budget, startDate, endDate):
         super(Aggressive_Investor, self).__init__(budget, startDate, endDate)
 
+
+    # @FunctionName: invest()
+    # @Goal: Simulate an investment with different kind of product
+    # @Parameters: Self, class instance
+    # @Return: None
     def invest(self):
 
 
         while self.budget >= 100 :
-            choiceS = random.randint(0, 9)
+            choiceS = random.randint(0, len(self.default_stock)-1)
             stockName = self.default_stock[choiceS]
 
             stockToBuy = Stock.Stock(stockName, 0, self.startDate, self.endDate)
@@ -105,6 +119,10 @@ class Aggressive_Investor(Investor):
     #End invest
 
 
+    # @FunctionName: profitReturnSeries()
+    # @Goal: Generate a Dataframe concataining all the values of the product present in the portfolio
+    # @Parameters: Self, class instance
+    # @Return: A Dataframe
     def profitReturnSeries(self):
         Data = pd.DataFrame(index=self.portfolio[0].interestSeriesComplete().index,
                             data=self.portfolio[0].interestSeriesComplete()['Interest'], columns=['Interest'])
@@ -124,6 +142,10 @@ class Mixed_Investor(Investor):
         super(Mixed_Investor, self).__init__(budget, startDate, endDate)
 
 
+    # @FunctionName: invest()
+    # @Goal: Simulate an investment with different kind of product
+    # @Parameters: Self, class instance
+    # @Return: None
     def invest(self):
 
         #Default Bond
@@ -161,7 +183,7 @@ class Mixed_Investor(Investor):
 
             else:
                 #It's a stock
-                choiceS = random.randint(0, 9)
+                choiceS = random.randint(0, len(self.default_stock)-1)
                 stockName = self.default_stock[choiceS]
 
                 stockToBuy = Stock.Stock(stockName, 0, self.startDate, self.endDate)
@@ -182,7 +204,10 @@ class Mixed_Investor(Investor):
         #End while
 
 
-
+    # @FunctionName: profitReturnSeries()
+    # @Goal: Generate a Dataframe concataining all the values of the product present in the portfolio
+    # @Parameters: Self, class instance
+    # @Return: A Dataframe
     def profitReturnSeries(self):
         firstDraw_B = True
         firstDraw_S = True
@@ -236,7 +261,11 @@ class Mixed_Investor(Investor):
 #### STATIC METHODS ####
 
 
-
+# @FunctionName: mergeInvestorsSeries_Dataframe()
+# @Goal: Merge the result of all the investor present in the given list
+# @Parameters: - list_of_investors, array containing Investors
+#              - number_investors, number of invertors in order to divide the sum of interest
+# @Return: A Dataframe containing all the computated information about the investors
 def mergeInvestorsSeries_Dataframe(list_of_investors, number_investors):
     # Now do the sum of each values
     # initialize the final series

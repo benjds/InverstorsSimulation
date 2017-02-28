@@ -3,11 +3,10 @@ import plotly
 import plotly.graph_objs as go
 from plotly import tools
 import os
-import plotly.plotly as py
 from Lib import Stock
 import numpy as np
 import time
-import random
+
 
 ###########################################
 #           Part 4: Simulations           #
@@ -15,38 +14,39 @@ import random
 
 start_time = time.time()
 
-
 ## Simulation parameters
-
-Numbers_of_investors = 1000
-Budget = 12000
 Years = ['2005','2006','2007','2008','2009','2010','2011','2012','2013','2014']
-start = '01/01/2005'
-end = '31/12/2015'
+
+print('Warning ! With 1000 investors, you need to wait 5 minutes in order to have the result depending to the options selected')
+print('')
+Numbers_of_investors = int(input("How many investors do you want to modelling ? "))
+Budget = int(input("How much for the initial investment ? "))
+start = input("Give the start date of the period that you want to model : (dd/mm/yyyy) ")
+end = input("And also the end ")
 #Years = ['2005']
 
 #Change the value to Yes, if you want to execute a specific simulation
-Years_simulation = 'No'
-Best_stock = 'Yes'
-Normal_distributed = 'No'
+Years_simulation = input('Do you want a years simulation ? (Y/N) ')
+Best_stock = input('Do you want know the best stock for 2007 ? (Y/N) ')
+Normal_distributed = input('Do you want a modelling with a budget following a normal distribution ? (Y/N) ')
 
 
 ### FOR EACH YEAR #####
 
-if(Years_simulation == 'Yes'):
+if(Years_simulation == 'Y' or Years_simulation == 'y'):
     fig = tools.make_subplots(rows=10, cols=3,
                               print_grid=False,
                               subplot_titles=("Defensive investors","Aggressive investors", "Mixed investors"))
 
     for x in range(0, len(Years)):
-        start = '01/01/' + Years[x]
-        end = '31/12/' + Years[x]
+        start_d = '01/01/' + Years[x]
+        end_d = '31/12/' + Years[x]
 
         defensive_investors = []
 
         #create the 1000 defensive investor
         for i in range(0,Numbers_of_investors):
-            new_Investor = Investor.Defensive_Investor(Budget, start, end)
+            new_Investor = Investor.Defensive_Investor(Budget, start_d, end_d)
             new_Investor.invest()
             defensive_investors.append(new_Investor)
 
@@ -58,7 +58,7 @@ if(Years_simulation == 'Yes'):
         aggressive_investors = []
 
         for j in range(0,Numbers_of_investors):
-            new_Investor = Investor.Aggressive_Investor(Budget, start, end)
+            new_Investor = Investor.Aggressive_Investor(Budget, start_d, end_d)
             new_Investor.invest()
             aggressive_investors.append(new_Investor)
 
@@ -69,7 +69,7 @@ if(Years_simulation == 'Yes'):
         mixed_investors = []
 
         for k in range(0, Numbers_of_investors):
-            new_Investor = Investor.Mixed_Investor(Budget, start, end)
+            new_Investor = Investor.Mixed_Investor(Budget, start_d, end_d)
             new_Investor.invest()
             mixed_investors.append(new_Investor)
 
@@ -106,7 +106,7 @@ if(Years_simulation == 'Yes'):
 
 ### BEST STOCK IN 2007 #####
 
-if(Best_stock == 'Yes'):
+if(Best_stock == 'Y' or Best_stock == 'y'):
     list_stock = []
 
 
@@ -151,7 +151,7 @@ if(Best_stock == 'Yes'):
 
 ### NORMAL DISTRIBUTED BUDGET #####
 
-if(Normal_distributed == 'Yes'):
+if(Normal_distributed == 'Y' or Normal_distributed == 'y'):
     # Defensive investor
 
     defensive_investors = []

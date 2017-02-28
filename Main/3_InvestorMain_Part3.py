@@ -11,7 +11,7 @@ start_time = time.time()
 
 
 ### Warning, Modelling 1000 investors could be time consuming (arround 4 minutes) ... ;)
-Numbers_of_investors = 1000  #But you can change the number of investors here
+Numbers_of_investors = 10  #But you can change the number of investors here
 Budget = 12000
 start = '01/01/2005'
 end = '31/12/2015'
